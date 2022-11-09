@@ -7,7 +7,7 @@ let initialState = {
       case "GET_DOGS":
       return {
         ...state, 
-        dogs: action.payload
+        dogsLoaded : action.payload
       }
       case "GET_MOVIES":
         return {

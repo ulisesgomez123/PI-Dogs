@@ -1,4 +1,4 @@
-export function getMovies() {
+export function getDogs() {
     return function(dispatch) {
       return fetch(`http://localhost:3001/dogs`)
         .then(response => response.json())
