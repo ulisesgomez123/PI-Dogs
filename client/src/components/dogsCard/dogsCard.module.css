@@ -1,0 +1,13 @@
+.cardBody {
+    margin-top: 0px !important;
+    padding-top: 0px !important;
+  }
+  .img {
+    height: 100px;
+    width: 120px;
+  }
+  .card {
+    border: solid red 3px;
+    width: fit-content;
+    margin: 20px 0 20px 0;
+  }
