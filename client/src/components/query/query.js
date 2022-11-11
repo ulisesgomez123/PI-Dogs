@@ -1,22 +1,25 @@
 import React, { Component } from "react";
-import {getDogs} from '../../redux/actions';
+import {getDogsByQuery} from '../../redux/actions';
 import { connect } from "react-redux";
 import DogCard from "../dogsCard/dogcard";
-import style from './mainPage.module.css'
+import style from '../MainPage/mainPage.module.css'
 
 
-
-export class MainPage extends Component {
+export class Query extends Component {
     componentDidMount() {
-      this.props.getDogs()
-   
+      const querystring = window.location.search
+      const params = new URLSearchParams(querystring)
+      const query= params.get('name')
+      if (query) {
+        this.props.getDogsByQuery(query)
+      }
     }
     render() {
       return (
         <div>
-            <input ></input> <input type='submit'></input> 
+        estas en query component
         <div className={style.container}>
-            {this.props.dogsList?.map( d => 
+            {this.props.dogList?.map( d => 
                 <DogCard 
                 name={d.name}
                 key={d.id}
@@ -24,7 +27,6 @@ export class MainPage extends Component {
                 weightImperial={d.weightImperial}
                 img={d.imageUrl}
                 temperament={d.temperament}
-                id={d.id}
                 />
             )}
         </div>
@@ -36,14 +38,14 @@ export class MainPage extends Component {
   
   export const mapStateToProps = function (state) {
     return {
-      dogsList: state.dogsLoaded
+      dogList: state.dogsloadedByQuery
     }
   }
   
   export function mapDispatchToProps(dispatch) {
     return {
-      getDogs: () => dispatch(getDogs())
+        getDogsByQuery: (query) => dispatch(getDogsByQuery(query))
     }
   }
   
-  export default connect(mapStateToProps,mapDispatchToProps)(MainPage);
+  export default connect(mapStateToProps,mapDispatchToProps)(Query);

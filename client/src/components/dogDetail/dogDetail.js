@@ -1,20 +1,19 @@
 import React, { Component } from "react";
-import {getDogs} from '../../redux/actions';
+import {getDetails} from '../../redux/actions';
 import { connect } from "react-redux";
 import DogCard from "../dogsCard/dogcard";
-import style from './mainPage.module.css'
+import style from '../MainPage/mainPage.module.css'
 
 
 
-export class MainPage extends Component {
+export class DogDetail extends Component {
     componentDidMount() {
-      this.props.getDogs()
-   
+      this.props.getDetails(this.props.match.params.breedId)
     }
     render() {
       return (
         <div>
-            <input ></input> <input type='submit'></input> 
+         you are in the detail component
         <div className={style.container}>
             {this.props.dogsList?.map( d => 
                 <DogCard 
@@ -24,7 +23,6 @@ export class MainPage extends Component {
                 weightImperial={d.weightImperial}
                 img={d.imageUrl}
                 temperament={d.temperament}
-                id={d.id}
                 />
             )}
         </div>
@@ -36,14 +34,14 @@ export class MainPage extends Component {
   
   export const mapStateToProps = function (state) {
     return {
-      dogsList: state.dogsLoaded
+      details: state.dogDetails
     }
   }
   
   export function mapDispatchToProps(dispatch) {
     return {
-      getDogs: () => dispatch(getDogs())
+        getDetails: (id) => dispatch(getDetails(id))
     }
   }
   
-  export default connect(mapStateToProps,mapDispatchToProps)(MainPage);
+  export default connect(mapStateToProps,mapDispatchToProps)(DogDetail);

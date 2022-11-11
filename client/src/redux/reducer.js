@@ -1,5 +1,7 @@
 let initialState = {
-   dogsLoaded: []
+   dogsLoaded: [],
+   dogsloadedByQuery: [],
+   dogDetails: {}
   };
    
   export default function rootReducer(state = initialState, action) {
@@ -9,21 +11,15 @@ let initialState = {
         ...state, 
         dogsLoaded : action.payload
       }
-      case "GET_MOVIES":
-        return {
-            ...state,
-            moviesLoaded: action.payload.Search
-        }
-        case "REMOVE_MOVIE_FAVORITE":
+        case "GET_DOGS_BY_QUERY":
             return {
                 ...state,
-                moviesFavorites: state.moviesFavorites.filter(e => 
-                    e.id !== action.payload )
+                dogsloadedByQuery: action.payload
             }
-        case "GET_MOVIE_DETAIL":
+        case "GET_DETAILS":
             return {
                 ...state,
-                movieDetail: action.payload
+                dogDetails: action.payload
             }
       default: return state;
     }
