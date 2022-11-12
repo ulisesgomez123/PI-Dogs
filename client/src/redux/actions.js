@@ -18,9 +18,9 @@ export function getDogs() {
     };
   }
 
-  export function getDetails(breedId) {
+  export function getDogDetails(breedId) {
     return function(dispatch) {
-      return fetch(`http://localhost:3001/${breedId}`)
+      return fetch(`http://localhost:3001/dogs/${breedId}`)
         .then(response => response.json())
         .then(res => {
           dispatch({ type: "GET_DETAILS" ,payload: res });

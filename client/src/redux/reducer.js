@@ -1,7 +1,7 @@
 let initialState = {
    dogsLoaded: [],
    dogsloadedByQuery: [],
-   dogDetails: {}
+   dogDetails: []
   };
    
   export default function rootReducer(state = initialState, action) {

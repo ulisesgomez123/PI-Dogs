@@ -3,16 +3,19 @@ import React from "react";
 import { Route } from "react-router-dom";
 import MainPage from './components/MainPage/mainPage';
 import Query from './components/query/query.js';
-import { DogDetail } from './components/dogDetail/dogDetail';
+import DogDetails from './components/dogDetail/dogDetail';
+import CreateDog from './components/createDog/createDog';
+
+
 
 
 function App () {
   return (
     <React.Fragment>
+          <Route exact path="/dogs/creation" component={CreateDog}/>
+          <Route exact path="/dog/:breedId" component={DogDetails}/> 
           <Route exact path="/" component={MainPage}/>
-           <Route path="/dogs" component={Query}/> 
-           <Route path="/dog/:breedId" component={DogDetail}/> 
-           
+          <Route exact path="/dogs" component={Query}/> 
       </React.Fragment>
   );
 }

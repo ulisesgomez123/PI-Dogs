@@ -3,17 +3,18 @@ import {getDogs} from '../../redux/actions';
 import { connect } from "react-redux";
 import DogCard from "../dogsCard/dogcard";
 import style from './mainPage.module.css'
-
+import {NavLink} from 'react-router-dom';
 
 
 export class MainPage extends Component {
     componentDidMount() {
       this.props.getDogs()
-   
     }
     render() {
       return (
+
         <div>
+             <NavLink to='/dogs/creation'><p>Create Dog</p></NavLink>
             <input ></input> <input type='submit'></input> 
         <div className={style.container}>
             {this.props.dogsList?.map( d => 
