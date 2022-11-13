@@ -3,3 +3,11 @@
     flex-wrap: wrap;
     justify-content: space-around;
 }
+
+a.link {
+ color: blue;
+}
+
+.body {
+    background-color: aqua !important;
+}

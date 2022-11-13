@@ -9,12 +9,16 @@ import {NavLink} from 'react-router-dom';
 export class MainPage extends Component {
     componentDidMount() {
       this.props.getDogs()
+      document.body.classList.add('body');
+    }
+    componentWillUnmount () {
+      document.body.classList.remove('body')
     }
     render() {
       return (
-
+         
         <div>
-             <NavLink to='/dogs/creation'><p>Create Dog</p></NavLink>
+             <NavLink className={style.link} to='/dogs/creation'><p>Create Dog</p></NavLink>
             <input ></input> <input type='submit'></input> 
         <div className={style.container}>
             {this.props.dogsList?.map( d => 
