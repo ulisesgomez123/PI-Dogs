@@ -7,9 +7,9 @@ const CreateDog = () => {
   const [input,setInput] = React.useState(
     {
       breed: "",
-      height: 0,
-      weight: 0,
-      lifeSpan: 0,
+      height: '',
+      weight: '',
+      lifeSpan: '',
       temperament: []
     }
 )
@@ -36,15 +36,15 @@ function dispatchInfoToBackend () {
     <div>
     <form onSubmit={() => dispatchInfoToBackend()}>
  <input name='breed' type='text' onChange={(e)=> handleChange(e)} placeholder='Breed Name'></input>
- <input type='number' name='height' onChange={(e)=> handleChange(e)} placeholder='Height: (min-max)'></input> 
- <input type='number' name='weight' onChange={(e)=> handleChange(e)} placeholder='Weight: (min-max)'></input>    
- <input type='number' name="lifeSpan" onChange={(e)=> handleChange(e)} placeholder='Life span'></input>
+ <input type='text' name='height' onChange={(e)=> handleChange(e)} placeholder='Height: (min-max)'></input> 
+ <input type='text' name='weight' onChange={(e)=> handleChange(e)} placeholder='Weight: (min-max)'></input>    
+ <input type='text' name="lifeSpan" onChange={(e)=> handleChange(e)} placeholder='Life span: (min-max)'></input>
           <select name='temperament' value={input.temperament[input.temperament.length-1]} 
             onChange={(e) => handleChangeSelect(e)}>
             <option >Temperament   </option>
             <option value="grapefruit">Grapefruit</option>
             <option value="lime">Lime</option>
-            <option value="coconut">Coconut</option>
+            <option value="coconut">Coconut</option> 
             <option value="mango">Mango</option>
           </select>
 
@@ -52,9 +52,9 @@ function dispatchInfoToBackend () {
     </form>
     <div>
       <label>Breed: <div className={style.div}>{input.breed}</div></label>
-      <label>Height: <div className={style.div}>{input.height}</div></label>
-      <label>Weight: <div className={style.div}>{input.weight}</div></label>
-      <label>Life Span: <div className={style.div}>{input.lifeSpan}</div></label>
+      <label>Height: <div className={style.div}>{input.height} centimeters</div></label>
+      <label>Weight: <div className={style.div}>{input.weight} kilograms</div></label>
+      <label>Life Span: <div className={style.div}>{input.lifeSpan} years</div></label>
       <label>Temperament: 
         <div className={style.temperament}>
         {input.temperament?.map(t => <div className={style.div}>{t}</div>)}
