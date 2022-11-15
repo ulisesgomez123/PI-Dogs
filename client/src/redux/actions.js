@@ -1,3 +1,6 @@
+import axios from 'axios';
+var id= 30000;
+
 export function getDogs() {
     return function(dispatch) {
       return fetch(`http://localhost:3001/dogs`)
@@ -24,6 +27,28 @@ export function getDogs() {
         .then(response => response.json())
         .then(res => {
           dispatch({ type: "GET_DETAILS" ,payload: res });
+        });
+    };
+  }
+
+  export function getTemperaments() {
+    return function(dispatch) {
+      return fetch(`http://localhost:3001/temperaments`)
+        .then(response => response.json())
+        .then(res => {
+          dispatch({ type: "GET_TEMPERAMENTS" ,payload: res });
+        });
+    };
+  }
+
+  export function createDog(input) {
+    return function(dispatch) {
+      return axios.post("http://localhost:3001/dogs/creation",{
+        ...input,
+        id: id= id + 1,
+        })
+        .then(res => {
+          dispatch({ type:"CREATE_DOG" ,payload: res.data });
         });
     };
   }

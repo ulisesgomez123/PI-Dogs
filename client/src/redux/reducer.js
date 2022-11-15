@@ -1,7 +1,9 @@
 let initialState = {
    dogsLoaded: [],
    dogsloadedByQuery: [],
-   dogDetails: []
+   dogDetails: [],
+   temperaments: [],
+   createdDogs: [],
   };
    
   export default function rootReducer(state = initialState, action) {
@@ -21,6 +23,16 @@ let initialState = {
                 ...state,
                 dogDetails: action.payload
             }
+        case "GET_TEMPERAMENTS":
+            return {
+                ...state,
+                temperaments: action.payload
+            }
+            case 'CREATE_DOG':
+              return {
+                  ...state,
+                  createdDogs: [...state.createdDogs,action.payload]
+              }
       default: return state;
     }
   }

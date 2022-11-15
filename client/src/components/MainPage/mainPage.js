@@ -21,6 +21,15 @@ export class MainPage extends Component {
              <NavLink className={style.link} to='/dogs/creation'><p>Create Dog</p></NavLink>
             <input ></input> <input type='submit'></input> 
         <div className={style.container}>
+        {this.props.createdDogs?.map( d => 
+                <DogCard 
+                name={d.breed}
+                key={d.id}
+                weightMetric={d.weight}
+                temperament={d.temperament}
+                id={d.id}
+                />
+            )}
             {this.props.dogsList?.map( d => 
                 <DogCard 
                 name={d.name}
@@ -32,6 +41,7 @@ export class MainPage extends Component {
                 id={d.id}
                 />
             )}
+           
         </div>
         </div>
         
@@ -41,7 +51,8 @@ export class MainPage extends Component {
   
   export const mapStateToProps = function (state) {
     return {
-      dogsList: state.dogsLoaded
+      dogsList: state.dogsLoaded,
+      createdDogs: state.createdDogs,
     }
   }
   

@@ -1,9 +1,17 @@
 import React from "react";
-import axios from 'axios';
 import style from './createDog.module.css'
-
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux"; 
+import { createDog, getTemperaments } from "../../redux/actions";
 
 const CreateDog = () => {
+  let dispatch= useDispatch();
+  var temps= useSelector( state => state.temperaments);
+
+  React.useEffect(()=>{
+    dispatch(getTemperaments())
+  },[]) 
+
   const [input,setInput] = React.useState(
     {
       breed: "",
@@ -26,26 +34,22 @@ function handleChangeSelect (e) {
     })
   }
 
-function dispatchInfoToBackend () {
-   axios.post("http://localhost:3001/dogs/creation",{
-   ...input
-   })
+function dispatchInfo(e) {
+  e.preventDefault();
+  dispatch(createDog(input))
 }
 
   return (
     <div>
-    <form onSubmit={() => dispatchInfoToBackend()}>
+    <form onSubmit={(e) => dispatchInfo(e)}>
  <input name='breed' type='text' onChange={(e)=> handleChange(e)} placeholder='Breed Name'></input>
  <input type='text' name='height' onChange={(e)=> handleChange(e)} placeholder='Height: (min-max)'></input> 
  <input type='text' name='weight' onChange={(e)=> handleChange(e)} placeholder='Weight: (min-max)'></input>    
  <input type='text' name="lifeSpan" onChange={(e)=> handleChange(e)} placeholder='Life span: (min-max)'></input>
           <select name='temperament' value={input.temperament[input.temperament.length-1]} 
             onChange={(e) => handleChangeSelect(e)}>
-            <option >Temperament   </option>
-            <option value="grapefruit">Grapefruit</option>
-            <option value="lime">Lime</option>
-            <option value="coconut">Coconut</option> 
-            <option value="mango">Mango</option>
+            <option >Temperament </option>
+            {temps?.map(t => <option value={t}>{t}</option>)}
           </select>
 
     <button type='submit'>Create</button>
