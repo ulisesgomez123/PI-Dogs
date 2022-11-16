@@ -12,6 +12,14 @@ const CreateDog = () => {
     dispatch(getTemperaments())
   },[]) 
 
+  const [error,setError] = React.useState(
+    {
+      breedError: '',
+      heightError: '',
+      weightError: '',
+      lifeSpanError: '',
+    }
+  )
   const [input,setInput] = React.useState(
     {
       breed: "",
@@ -22,7 +30,27 @@ const CreateDog = () => {
     }
 )
 
-function handleChange (e) {
+function validation (e) {
+  if (e.target.name === 'breed') {
+   setError({...error,
+    breedError: /[a-zA-ZñÑáéíóúÁÉÍÓÚ]/.test(e.target.value)
+   })
+  }
+  if (e.target.name === 'height') {
+    setError({...error,
+      heightError: /\d+\-\d+/.test(e.target.value)
+     })
+   }
+   if (e.target.name === 'weight') {
+    setError({...error,
+      weightError: /\d+\-\d+/.test(e.target.value)
+     })
+   }
+   if (e.target.name === 'lifeSpan') {
+    setError({...error,
+      lifeSpanError: /\d+\-\d+/.test(e.target.value)
+     })
+   }
   setInput({...input,
             [e.target.name]: e.target.value
   })
@@ -34,18 +62,28 @@ function handleChangeSelect (e) {
     })
   }
 
+function submitControl (input) {
+ return input
+}
+
 function dispatchInfo(e) {
   e.preventDefault();
+  console.log(submitControl(input))
   dispatch(createDog(input))
+  
 }
 
   return (
     <div>
     <form onSubmit={(e) => dispatchInfo(e)}>
- <input name='breed' type='text' onChange={(e)=> handleChange(e)} placeholder='Breed Name'></input>
- <input type='text' name='height' onChange={(e)=> handleChange(e)} placeholder='Height: (min-max)'></input> 
- <input type='text' name='weight' onChange={(e)=> handleChange(e)} placeholder='Weight: (min-max)'></input>    
- <input type='text' name="lifeSpan" onChange={(e)=> handleChange(e)} placeholder='Life span: (min-max)'></input>
+    {error.breedError? null : <span>is wrong</span>}
+ <input name='breed' type='text' onChange={(e)=> validation(e)} placeholder='Breed Name'></input>
+ {error.heightError? null : <span>is wrong</span>}
+ <input type='text' name='height' onChange={(e)=> validation(e)} placeholder='Height: (min-max)'></input>
+ {error.weightError? null : <span>is wrong</span>} 
+ <input type='text' name='weight' onChange={(e)=> validation(e)} placeholder='Weight: (min-max)'></input>
+ {error.lifeSpanError? null : <span>is wrong</span>}    
+ <input type='text' name="lifeSpan" onChange={(e)=> validation(e)} placeholder='Life span: (min-max)'></input>
           <select name='temperament' value={input.temperament[input.temperament.length-1]} 
             onChange={(e) => handleChangeSelect(e)}>
             <option >Temperament </option>
@@ -55,11 +93,11 @@ function dispatchInfo(e) {
     <button type='submit'>Create</button>
     </form>
     <div>
-      <label>Breed: <div className={style.div}>{input.breed}</div></label>
-      <label>Height: <div className={style.div}>{input.height} centimeters</div></label>
-      <label>Weight: <div className={style.div}>{input.weight} kilograms</div></label>
-      <label>Life Span: <div className={style.div}>{input.lifeSpan} years</div></label>
-      <label>Temperament: 
+      <label className={error.breedError ? style.label : style.warning}>Breed: <div className={style.div}>{input.breed}</div></label>
+      <label className={error.heightError ? style.label : style.warning}>Height: <div className={style.div}>{`(${input.height})`} centimeters</div></label>
+      <label className={error.weightError ? style.label : style.warning}>Weight: <div className={style.div}>{`(${input.weight})`} kilograms</div></label>
+      <label className={error.lifeSpanError ? style.label : style.warning}>Life Span: <div className={style.div}>{`(${input.lifeSpan})`} years</div></label>
+      <label className={style.label}>Temperament: 
         <div className={style.temperament}>
         {input.temperament?.map(t => <div className={style.div}>{t}</div>)}
         </div>

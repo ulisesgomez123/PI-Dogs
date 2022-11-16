@@ -1,6 +1,7 @@
-label {
+.label {
     display: flex;
     color: aqua;
+    font-weight: bold;
 }
 
 .temperament {
@@ -15,4 +16,15 @@ p {
 .div {
     margin-left: 10px;
     color: beige;
+}
+
+.warning {
+    display: flex;
+    color: red;
+    font-weight: bold;
+}
+
+span {
+    color: red;
+    font-weight: bold;
 }

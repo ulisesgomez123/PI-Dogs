@@ -1,5 +1,7 @@
 import axios from 'axios';
-var id= 30000;
+var numRam= Math.random() * (Math.random() * 4044440)
+var id= Math.floor(numRam)
+
 
 export function getDogs() {
     return function(dispatch) {
@@ -45,7 +47,7 @@ export function getDogs() {
     return function(dispatch) {
       return axios.post("http://localhost:3001/dogs/creation",{
         ...input,
-        id: id= id + 1,
+        id: id = id + 1
         })
         .then(res => {
           dispatch({ type:"CREATE_DOG" ,payload: res.data });
