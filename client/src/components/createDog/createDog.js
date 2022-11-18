@@ -33,7 +33,7 @@ const CreateDog = () => {
 function rectifyNum (e) {
   let err= 'Error';
   let name= e.target.name + err;
-  let ver =/\d+\-\d+/.test(e.target.value)
+  let ver =/^\d+\-\d+$/.test(e.target.value)
   if (ver) {
     var strToArray= e.target.value.split('-')
      let min = parseInt(strToArray[0])

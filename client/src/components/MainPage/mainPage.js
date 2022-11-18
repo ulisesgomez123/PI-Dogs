@@ -1,27 +1,50 @@
-import React, { Component } from "react";
+import React from "react";
 import {getDogs} from '../../redux/actions';
-import { connect } from "react-redux";
+import { getDogByName } from "../../redux/actions";
 import DogCard from "../dogsCard/dogcard";
 import style from './mainPage.module.css'
 import {NavLink} from 'react-router-dom';
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux"; 
 
 
-export class MainPage extends Component {
-    componentDidMount() {
-      this.props.getDogs()
-      document.body.classList.add('body');
+export default function MainPage () {
+  let dispatch= useDispatch();
+  let dogsloadedBySearch= useSelector( state => state.dogsloadedBySearch);
+  let dogsloaded= useSelector( state => state.dogsLoaded);
+  let createdDogs= useSelector( state => state.createdDogs);
+
+  React.useEffect(()=>{
+    dispatch(getDogs())
+  },[]) 
+
+  const [search,setSearch] = React.useState({
+    value: ''
+  })
+ 
+   function  handleChange(e)  {
+    setSearch((prevState) => {return {...prevState,
+      value: e.target.value
+     }
+   })
     }
-    componentWillUnmount () {
-      document.body.classList.remove('body')
+    
+
+     function  searchFaction () {
+      console.log(search.value)
+      // dispatch(getDogByName(search.value))
     }
-    render() {
+
       return (
          
         <div>
              <NavLink className={style.link} to='/dogs/creation'><p>Create Dog</p></NavLink>
-            <input ></input> <input type='submit'></input> 
+             <div>
+            <input onChange={e => handleChange(e)}></input> <button onClick={() => searchFaction()}>Search</button> 
+            </div>
+            
         <div className={style.container}>
-        {this.props.createdDogs?.map( d => 
+        {createdDogs?.map( d => 
                 <DogCard 
                 name={d.breed}
                 key={d.id}
@@ -30,8 +53,18 @@ export class MainPage extends Component {
                 id={d.id}
                 />
             )}
-            {this.props.dogsList?.map( d => 
+
+        {dogsloadedBySearch[0] ? dogsloadedBySearch.map( d => 
                 <DogCard 
+                name={d.name}
+                key={d.id}
+                weightMetric={d.weightMetric}
+                weightImperial={d.weightImperial}
+                temperament={d.temperament}
+                id={d.id}
+                />
+            ) : dogsloaded?.map( d => 
+              <DogCard 
                 name={d.name}
                 key={d.id}
                 weightMetric={d.weightMetric}
@@ -40,26 +73,16 @@ export class MainPage extends Component {
                 temperament={d.temperament}
                 id={d.id}
                 />
-            )}
+          )}
            
         </div>
         </div>
         
       );
     }
-  }
   
-  export const mapStateToProps = function (state) {
-    return {
-      dogsList: state.dogsLoaded,
-      createdDogs: state.createdDogs,
-    }
-  }
   
-  export function mapDispatchToProps(dispatch) {
-    return {
-      getDogs: () => dispatch(getDogs())
-    }
-  }
+ 
+
+
   
-  export default connect(mapStateToProps,mapDispatchToProps)(MainPage);
