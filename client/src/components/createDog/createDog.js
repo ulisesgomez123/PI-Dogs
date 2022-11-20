@@ -125,8 +125,7 @@ function dispatchInfo(e) {
  <input value={input.weight} type='text' name='weight' onChange={(e)=> validation(e)} placeholder='Weight: (min-max)'></input>
  {error.lifeSpanError? <span className={style.correct}>this field is OK</span> : <span>it must have this format: min-max</span>}    
  <input value={input.lifeSpan} type='text' name="lifeSpan" onChange={(e)=> validation(e)} placeholder='Life span: (min-max)'></input>
-          <select name='temperament' value={input.temperament[input.temperament.length-1]} 
-            onChange={(e) => handleChangeSelect(e)}>
+          <select name='temperament' onChange={(e) => handleChangeSelect(e)}>
             <option key='0'>Temperaments </option>
             {temps?.map(t => <option value={t.name} key={t.id}>{t.name}</option>)}
           </select>

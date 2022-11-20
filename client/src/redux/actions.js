@@ -57,9 +57,10 @@ export function getDogs() {
 
   export function getDogByName(name) {
     return function(dispatch) {
-      return axios.get(`http://localhost:3001/dogs/${name}`)
+      return fetch(`http://localhost:3001/dogs/search/${name}`)
+        .then(response => response.json())
         .then(res => {
-          dispatch({ type:"GET_DOG_BY_NAME" ,payload: res.data });
+          dispatch({ type:"GET_DOG_BY_NAME" ,payload: res });
         });
     };
   }
