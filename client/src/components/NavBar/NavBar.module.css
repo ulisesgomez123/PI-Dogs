@@ -1,25 +1,26 @@
 .h2 {
-    margin-right: 600px;
-    color: antiquewhite;
+    margin-left: 300px;
+    margin-right: 550px;
+    color: rgb(44, 42, 40);
+    font-weight:900;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .img {
-    width: 60px !important;
-    height: 50px !important;
-    margin-top: 15px;
+    width: 40px !important;
+    height: 30px !important;
 }
 .navbar {
     height: 56px;
     width: 100%;
     top: 0;
     left: 0;
-    background-color: #27282a;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
     box-sizing: border-box;
+    backdrop-filter: blur(10px);
 }
 
 .navbar nav {
@@ -27,7 +28,7 @@
 }
 
 .list {
-    margin: 0;
+    margin: 0 0 0 0;
     padding: 0;
     list-style: none;
     display: flex;
@@ -35,32 +36,32 @@
     align-items: center;
     height: 100%;
     font-size: 23px;
-
 }
 a {
     transition-property: margin-left, margin-right, font-size;
-    transition-duration: 1s;
+    transition-duration: 500ms;
 }
 a.link:link {
+    font-size: 30px;
     margin-left: 15px;
     margin-right: 15px;
     text-decoration: none;
-    color:rgb(6, 163, 163);
+    color: white;
 }
 
  a.link:hover {
     margin-left: 22px;
     margin-right: 22px;
-    font-size: 30px;
-    color:rgb(6, 163, 163);
+    font-size: 40px;
+    color: white;
 }
 a.link.active {
     margin-left: 22px;
     margin-right: 22px;
-    font-size: 30px;
-    color:rgb(6, 163, 163);
+    font-size: 40px;
+    color: rgb(186, 30, 30);
     font-weight: bold;
 }
 a.link:visited {
-    color:rgb(6, 163, 163);
+    color: white;
 }

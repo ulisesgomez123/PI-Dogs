@@ -1,18 +1,20 @@
 import React from "react";
-import {getDogs} from '../../redux/actions';
+import {getDogs,getTemperaments} from '../../redux/actions';
 import { getDogByName } from "../../redux/actions";
 import DogCard from "../dogsCard/dogcard";
 import style from './mainPage.module.css'
 import {NavLink} from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux"; 
-
+import {buttonTemperaments,handleChangeSelect,next,dogCard,filter
+       ,nextFilter,order,previous} from '../functions';
 
 function MainPage () {
   let dispatch= useDispatch();
   let dogsloadedBySearch= useSelector( state => state.dogsloadedBySearch);
   let dogsloaded= useSelector( state => state.dogsLoaded);
   let createdDogs= useSelector( state => state.createdDogs);
+  let temperaments= useSelector( state => state.temperaments);
 
   const [mainPage,setMainPage] = React.useState({
     beginning: true,
@@ -25,98 +27,39 @@ function MainPage () {
     byWeight: false,
     ascending: true,
     descending: false,
-  })
+    orderByWeightAscending: false,
+    orderByWeightDescending: false,
+    temperaments: false,
+    switch: [false,false]})
   
   React.useEffect( ()=>{
     dispatch(getDogs())
+    dispatch(getTemperaments())
    },[]) 
 
   React.useEffect( ()=>{
-    order()
-   },[mainPage.alphabetical,mainPage.byWeight,mainPage.ascending,mainPage.descendiong]) 
+    order(mainPage,setMainPage,dogsloaded)
+   },[mainPage.alphabetical,mainPage.byWeight,mainPage.ascending,mainPage.descendiong,mainPage.temperaments]) 
 
-  
+   React.useEffect( ()=>{
+   filter(mainPage,setMainPage,dogsloaded)
+   },[mainPage.temperamentString,mainPage.alphabetical,mainPage.byWeight,mainPage.ascending,mainPage.descendiong]) 
 
-   function  handleChange(e)  {
+   function  handleChange (e)  {
     setMainPage((prevState) => {return {...prevState,
       value: e.target.value
      }
    })
-    }
+  }
     
-
-     function  searchFunction () {
+  function  searchFunction () {
       dispatch(getDogByName(mainPage.value))
       setMainPage((prevState) => {return {...prevState,
         value: ''
        }
      })
-     }
+    }
 
-     function next() {
-      var index= mainPage.currentPage * 8 - mainPage.numOfDogsCreated;
-      if (mainPage.alphabetical && mainPage.descending) {
-        if (!mainPage.storage[0]) {
-          console.log('aaaaa')
-         setMainPage((prevState) => {return {...prevState,
-          nextDogs: mainPage.dogs?.splice(index,8),
-          currentPage: mainPage.currentPage + 1,
-          storage: mainPage.dogs?.splice(0,8 - mainPage.numOfDogsCreated),
-          prev: false,} 
-      });
-    }
-    else {
-      console.log('bbbbb')
-      setMainPage((prevState) => {return {...prevState,
-       nextDogs: mainPage.dogs?.splice(index,8),
-       currentPage: mainPage.currentPage + 1,
-       storage: [...mainPage.storage,...mainPage.nextDogs],
-       prev: false,} 
-   });
- }
-}
-      if (mainPage.alphabetical && mainPage.ascending) {
-        if (!mainPage.storage[0]) {
-          console.log('kkkkk')
-          setMainPage((prevState) => {return {...prevState,
-            nextDogs: dogsloaded?.splice(index, 8),
-            currentPage: mainPage.currentPage + 1,
-            storage: dogsloaded.splice(0, 8 -  mainPage.numOfDogsCreated),
-            prev: false,
-           } 
-         })
-        }
-     else {
-      console.log('jjjjj')
-      setMainPage((prevState) => {return {...prevState,
-        nextDogs:dogsloaded?.splice(index, 8),
-        storage: [...mainPage.storage,...mainPage.nextDogs],
-        currentPage: mainPage.currentPage + 1,
-        prev: false,
-       } 
-     })
-    }
-    }
-  }
-     function previous() {
-      var index= mainPage.currentPage * 8 - 8*2
-      if (mainPage.currentPage !== 2) {
-        setMainPage((prevState) => {return {...prevState,
-          prevDogs: mainPage.storage.splice(index, 8),
-          currentPage: mainPage.currentPage - 1,
-          prev: true,
-         } 
-       })
-      }
-      else {
-        setMainPage((prevState) => {return {...prevState,
-          prevDogs: mainPage.storage.splice(0,8),
-          currentPage: mainPage.currentPage - 1,
-          prev: true,
-         } 
-       })
-      }
-    }
     function onChange (e) {
      if (e.target.value === 'alphabetical') {
       setMainPage((prevState) => {return {...prevState,
@@ -124,7 +67,7 @@ function MainPage () {
         byWeight: false
        } 
      })
-     }
+   }
      if (e.target.value === 'by weight') {
       setMainPage((prevState) => {return {...prevState,
         byWeight: true,
@@ -132,38 +75,7 @@ function MainPage () {
        } 
      })
     }
-    }
-
-    function order () {
-       if (mainPage.alphabetical) {
-         if (mainPage.ascending) {
-          if (mainPage.beginning) {
-            setMainPage((prevState) => {return {...prevState,
-              storage: [],
-             };})
-          }
-           else {
-            setMainPage((prevState) => {return {...prevState,
-              nextDogs: dogsloaded?.slice(0,8 - mainPage.numOfDogsCreated),
-              currentPage: 1,
-              storage: [],
-             };})
-           } 
-         }
-         if (mainPage.descending) {
-            setMainPage((prevState) => {return {...prevState,
-              dogs: [...dogsloaded].reverse(),
-              nextDogs: [...dogsloaded].reverse().slice(0,8 - mainPage.numOfDogsCreated),
-              currentPage: 1,
-              storage: [],
-             };})
-          }
-       }
-       else if (mainPage.byWeight) {
-         
-       }
-    }
-
+  }
 
     function onChangeDirection (e) {
       if (e.target.value === 'ascending') {
@@ -183,12 +95,19 @@ function MainPage () {
        })
       }
     }
-
       return ( 
         <div>
           <h1>Pagina: {mainPage.currentPage}</h1>
-          <button onClick={previous}>previous</button>
-          <button onClick={next}>next</button>
+          {mainPage.dogsFiltered ? mainPage.dogsFiltered[0] ? mainPage.dogsFiltered.length > 8 ? 
+          <button onClick={()=>previous(mainPage,setMainPage)}> previous</button > : null : 
+          <button onClick={()=>previous(mainPage,setMainPage)}>previous</button> : 
+          <button onClick={()=>previous(mainPage,setMainPage)}>previous</button>}
+
+          {mainPage.dogsFiltered ? mainPage.dogsFiltered[0] ? mainPage.dogsFiltered.length > 8 ? 
+          <button onClick={()=>nextFilter(mainPage,setMainPage)}>next</button> : null : 
+          <button onClick={()=>next(mainPage,setMainPage,dogsloaded)}>next</button> : 
+          <button onClick={()=>next(mainPage,setMainPage,dogsloaded)}>next</button>}
+
           <select onChange={(e) => onChange(e)}>
              <option value='alphabetical'>Alphabetical</option>
              <option value='by weight'>By weight</option>
@@ -198,12 +117,25 @@ function MainPage () {
              <option value='ascending'>Ascending</option>
              <option value='descending'>Descending</option>
           </select>
-          
-             <NavLink className={style.link} to='/dogs/creation'><p>Create Dog</p></NavLink>
-             <div>
-            <input value={mainPage.value} onChange={e => handleChange(e)}></input> <button onClick={() => searchFunction()}>Search</button> 
-            {dogsloadedBySearch[0] ? <button onClick={() => searchFunction()}>back home</button> : null}
-            </div>
+
+          <button onClick={previous}>Made dogs</button>
+          <button >Not made dogs</button>
+
+          <button onClick={() =>buttonTemperaments(setMainPage)}> Dog temperaments</button>
+
+          {mainPage.temperaments ? <select onChange={(e)=>handleChangeSelect(e,setMainPage,mainPage)}>
+          <option key='0'>Temperaments </option> {temperaments?.map(t => <option value={t.name} 
+           key={t.id}>{t.name}</option>)}</select> : null }
+
+          {mainPage.dogsFiltered && mainPage.switch[0] && mainPage.switch[1] ? 
+          <h2> Found dogs: {mainPage.dogsFiltered.length} </h2> : null }
+  
+          <NavLink className={style.link} to='/dogs/creation'><p>Create Dog</p></NavLink>
+        <div>
+            <input value={mainPage.value} onChange={e => handleChange(e)}></input><button 
+            onClick={() => searchFunction()}>Search</button>{dogsloadedBySearch[0] ? <button
+            onClick={() => searchFunction()}>back home</button> : null}
+        </div>
             
         <div className={style.container}>
         {dogsloadedBySearch[0] ? null : mainPage.currentPage === 1 ? createdDogs?.map( d => 
@@ -216,68 +148,19 @@ function MainPage () {
                 />
             ) : null
          }
-
-        {dogsloadedBySearch[0] ? dogsloadedBySearch.map( d => 
-                <DogCard 
-                name={d.name}
-                key={d.id}
-                weightMetric={d.weightMetric}
-                weightImperial={d.weightImperial}
-                temperament={d.temperament}
-                img= {d.imageUrl}
-                id={d.id}
-                />)
-               : mainPage.prev ? mainPage.prevDogs?.map( d => 
-              <DogCard 
-                name={d.name}
-                key={d.id}
-                weightMetric={d.weightMetric}
-                weightImperial={d.weightImperial}
-                img={d.imageUrl}
-                temperament={d.temperament}
-                id={d.id}
-                />)
-               : mainPage.nextDogs ? mainPage.nextDogs?.map( d => 
-              <DogCard 
-                name={d.name}
-                key={d.id}
-                weightMetric={d.weightMetric}
-                weightImperial={d.weightImperial}
-                img={d.imageUrl}
-                temperament={d.temperament}
-                id={d.id}
-                />) 
+            {mainPage.dogsFiltered && !mainPage.prev ? mainPage.nextDogs && !mainPage.prev ?
+             mainPage.nextDogs?.map( d => dogCard(d)) 
+             : [...mainPage.dogsFiltered]?.splice(0,8).map( d => dogCard(d)) 
+             : dogsloadedBySearch[0] ? dogsloadedBySearch.map( d => dogCard(d))
+             : mainPage.prev ? mainPage.prevDogs?.map( d => dogCard(d))
+             : mainPage.nextDogs ? mainPage.nextDogs?.map( d => dogCard(d)) 
              : mainPage.alphabetical && mainPage.descending ?
-             mainPage.dogs?.slice(0,8-mainPage.numOfDogsCreated).map( d => 
-              <DogCard 
-               name={d.name}
-               key={d.id}
-               weightMetric={d.weightMetric}
-               weightImperial={d.weightImperial}
-               img={d.imageUrl}
-               temperament={d.temperament}
-               id={d.id}
-               />) :
-              dogsloaded?.slice(0,8-mainPage.numOfDogsCreated).map( d => 
-             <DogCard 
-              name={d.name}
-              key={d.id}
-              weightMetric={d.weightMetric}
-              weightImperial={d.weightImperial}
-              img={d.imageUrl}
-              temperament={d.temperament}
-              id={d.id}
-              />)
-              } 
-
+             [...mainPage.dogs]?.slice(0,8-mainPage.numOfDogsCreated).map( d => dogCard(d)) :
+             [...dogsloaded]?.slice(0,8-mainPage.numOfDogsCreated).map( d => dogCard(d))
+            } 
         </div>
-        </div>
+    </div>
         
       );
     }
     export default MainPage
-  
- 
-
-
-  

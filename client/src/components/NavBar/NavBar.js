@@ -1,23 +1,23 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import style from './NavBar.module.css';
+import img from '../../perro.png'
 
 export default function NavBar() {
     return (
         <header className={style.navbar}>
             <div>
-            {/* <img className='img' src={img} alt='icono'/> */}
+               <img className={style.img} src={img} alt='icono'/> 
             </div>
-            <div><h2 className={style.h2}>Movie App</h2></div>
             <nav>
                 <ul className={style.list}>
                     <li >
-                        <NavLink className={style.link} to="/main_page">Home</NavLink>
-                        <NavLink className={style.link} to="/about">About</NavLink>
-                        
+   <NavLink className={style.link} activeClassName={style.active} to="/main_page">Home</NavLink>
+   <NavLink className={style.link} activeClassName={style.active} to="/about">About</NavLink>
                     </li>
                 </ul>
             </nav>
-        </header>
+        <div><h2 className={style.h2}>Dog App</h2></div>
+    </header>
     )
 }

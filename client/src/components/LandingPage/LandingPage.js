@@ -9,7 +9,7 @@ export class LandingPage extends Component {
       return (
 
         <div>
-            stas en la landingPage
+            <h1>stas en la landingPage</h1>
         </div>
         
       );
