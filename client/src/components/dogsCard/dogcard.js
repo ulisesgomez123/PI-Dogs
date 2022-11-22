@@ -6,23 +6,26 @@ export default function DogCard ({weightImperial,weightMetric, temperament, name
     return ( 
       <div className={style.card} >
         <div className={style.cardBody}>
-          <NavLink to={`/dog/${id}`}> 
-           <h2>{name}</h2>
+           <div className={style.name}> 
+          <NavLink className={style.link} activeClassName={style.active} to={`/dog/${id}`} > 
+           <div>{name}</div>
            </NavLink>
+           </div>
+
           <div>
-
             <div>
-             Temperament: <p>{temperament}</p>
+             <label className={style.atributes}>Temperaments: </label>
+             <div className={style.content}>{temperament}</div>
             </div>
 
             <div>
-            weight:
-            <p>kilograms: {weightMetric}</p>
-            <p>pounds: {weightImperial}</p>
+            <div className={style.atributes}>Weight: </div>
+            <label className={style.atributes}>kilograms: </label> <div className={style.content}>{weightMetric}</div>
+            <label className={style.atributes}> pounds: </label><div className={style.content}>{weightImperial}</div>
             </div>
 
-            <div >
-              <img className={style.img} src={img} alt='dog image'/>
+            <div className={style.divImg}>
+             <img className={style.img} src={img} alt='dog image'/>
             </div>
 
           </div>

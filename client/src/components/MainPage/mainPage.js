@@ -7,7 +7,7 @@ import {NavLink} from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux"; 
 import {buttonTemperaments,handleChangeSelect,next,dogCard,filter
-       ,nextFilter,order,previous} from '../functions';
+       ,nextFilter,order,previous} from './functions';
 
 function MainPage () {
   let dispatch= useDispatch();
@@ -30,7 +30,9 @@ function MainPage () {
     orderByWeightAscending: false,
     orderByWeightDescending: false,
     temperaments: false,
-    switch: [false,false]})
+    switch: [false,false],
+    madeDogs: [false,true,true]
+  })
   
   React.useEffect( ()=>{
     dispatch(getDogs())
@@ -95,6 +97,22 @@ function MainPage () {
        })
       }
     }
+    function notMadeDogs () {
+      setMainPage((prevState) => {return {...prevState,
+        madeDogs: [true,true],
+        numOfDogsCreated: 0,
+        dogsFiltered: '',
+       } 
+     })
+    }
+
+    function madeDogs () {
+      setMainPage((prevState) => {return {...prevState,
+        madeDogs: [false,true],
+        numOfDogsCreated: createdDogs.length
+       } 
+     })
+    }
       return ( 
         <div>
           <h1>Pagina: {mainPage.currentPage}</h1>
@@ -118,8 +136,8 @@ function MainPage () {
              <option value='descending'>Descending</option>
           </select>
 
-          <button onClick={previous}>Made dogs</button>
-          <button >Not made dogs</button>
+          <button onClick={notMadeDogs}>Not made dogs</button>
+          <button onClick={madeDogs}>Made dogs</button>
 
           <button onClick={() =>buttonTemperaments(setMainPage)}> Dog temperaments</button>
 
@@ -129,8 +147,6 @@ function MainPage () {
 
           {mainPage.dogsFiltered && mainPage.switch[0] && mainPage.switch[1] ? 
           <h2> Found dogs: {mainPage.dogsFiltered.length} </h2> : null }
-  
-          <NavLink className={style.link} to='/dogs/creation'><p>Create Dog</p></NavLink>
         <div>
             <input value={mainPage.value} onChange={e => handleChange(e)}></input><button 
             onClick={() => searchFunction()}>Search</button>{dogsloadedBySearch[0] ? <button
@@ -138,7 +154,7 @@ function MainPage () {
         </div>
             
         <div className={style.container}>
-        {dogsloadedBySearch[0] ? null : mainPage.currentPage === 1 ? createdDogs?.map( d => 
+        {dogsloadedBySearch[0] ? null : mainPage.currentPage === 1 && mainPage.madeDogs[1] && !mainPage.madeDogs[0] ? createdDogs?.map( d => 
                 <DogCard 
                 name={d.breed}
                 key={d.id}
@@ -148,16 +164,21 @@ function MainPage () {
                 />
             ) : null
          }
-            {mainPage.dogsFiltered && !mainPage.prev ? mainPage.nextDogs && !mainPage.prev ?
+         
+         {  mainPage.madeDogs.length === 2 && !mainPage.madeDogs[0] ? null :
+          dogsloadedBySearch[0] ? dogsloadedBySearch.map( d => dogCard(d))
+             : mainPage.dogsFiltered && !mainPage.prev ? mainPage.nextDogs && !mainPage.prev ?
              mainPage.nextDogs?.map( d => dogCard(d)) 
              : [...mainPage.dogsFiltered]?.splice(0,8).map( d => dogCard(d)) 
-             : dogsloadedBySearch[0] ? dogsloadedBySearch.map( d => dogCard(d))
              : mainPage.prev ? mainPage.prevDogs?.map( d => dogCard(d))
              : mainPage.nextDogs ? mainPage.nextDogs?.map( d => dogCard(d)) 
              : mainPage.alphabetical && mainPage.descending ?
-             [...mainPage.dogs]?.slice(0,8-mainPage.numOfDogsCreated).map( d => dogCard(d)) :
-             [...dogsloaded]?.slice(0,8-mainPage.numOfDogsCreated).map( d => dogCard(d))
-            } 
+             [...mainPage.dogs]?.slice(0,8 -mainPage.numOfDogsCreated).map( d => dogCard(d)) : 
+             !mainPage.madeDogs[0]  && mainPage.madeDogs[1] && mainPage.madeDogs[2] ?  
+             [...dogsloaded]?.slice(0,8-mainPage.numOfDogsCreated).map( d => dogCard(d)) :
+              mainPage.madeDogs[0]  && mainPage.madeDogs[1] ?  
+             [...dogsloaded]?.slice(0,8-mainPage.numOfDogsCreated).map( d => dogCard(d)) : null
+          } 
         </div>
     </div>
         

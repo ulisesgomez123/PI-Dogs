@@ -19,7 +19,8 @@ export function buttonTemperaments (changeState) {
     changeState((prevState) => {return {...prevState,
         temperaments: true,
         beginning: false,
-        switch: [true]
+        switch: [true],
+        madeDogs: [true,true]
        } 
      })
 }
@@ -35,12 +36,14 @@ export function handleChangeSelect (e,changeState) {
         temperamentString: e.target.value,
         currentPage: 1,
         nextDogs:'',
-        switch: [true,true]
+        switch: [true,true],
+        madeDogs: [true,true]
        } 
      })
   }
 
-  export function next(state,changeState,dogs) {
+  export function next (state,changeState,dogs) {
+    if (state.currentPage > 21) return
     var index= state.currentPage * 8 - state.numOfDogsCreated;
     if (state.alphabetical && state.descending) {
       if (!state.storage[0]) {
@@ -125,10 +128,10 @@ changeState((prevState) => {return {...prevState,
   storage: [...state.storage,...state.nextDogs],
   currentPage: state.currentPage + 1,
   prev: false,
- } 
-})
-}
-}
+       } 
+    })
+   }
+  }
 }
 
 export function dogCard (d) {
@@ -263,6 +266,7 @@ export function order (state,changeState,dogs) {
 }
 
 export function previous(state,changeState) {
+  if (state.currentPage <= 1) return 
     var index= state.currentPage * 8 - 8*2
     if (state.currentPage !== 2) {
           changeState((prevState) => {return {...prevState,

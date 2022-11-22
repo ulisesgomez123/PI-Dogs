@@ -6,18 +6,19 @@ import img from '../../perro.png'
 export default function NavBar() {
     return (
         <header className={style.navbar}>
-            <div>
-               <img className={style.img} src={img} alt='icono'/> 
-            </div>
             <nav>
                 <ul className={style.list}>
                     <li >
    <NavLink className={style.link} activeClassName={style.active} to="/main_page">Home</NavLink>
+   <NavLink className={style.link} activeClassName={style.active} to='/dogs/creation'>Create Dog</NavLink>
    <NavLink className={style.link} activeClassName={style.active} to="/about">About</NavLink>
                     </li>
                 </ul>
             </nav>
-        <div><h2 className={style.h2}>Dog App</h2></div>
+        <div><div className={style.div}>Dog App</div></div>
+        <div>
+               <img className={style.img} src={img} alt='icono'/> 
+            </div>
     </header>
     )
 }

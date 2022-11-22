@@ -1,14 +1,16 @@
-.h2 {
-    margin-left: 300px;
-    margin-right: 550px;
-    color: rgb(44, 42, 40);
-    font-weight:900;
+.div {
+    font-size: 40px;
+    margin-left: 500px;
+    margin-right: 0px;
+    color: rgb(215, 121, 27);
+    font-weight:bolder;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .img {
     width: 40px !important;
-    height: 30px !important;
+    height: 40px !important;
+    margin-top: 8px;
 }
 .navbar {
     height: 56px;
@@ -21,10 +23,6 @@
     padding: 0 20px;
     box-sizing: border-box;
     backdrop-filter: blur(10px);
-}
-
-.navbar nav {
-    height: 100%;
 }
 
 .list {
@@ -59,7 +57,7 @@ a.link.active {
     margin-left: 22px;
     margin-right: 22px;
     font-size: 40px;
-    color: rgb(186, 30, 30);
+    color: rgb(250, 245, 245);
     font-weight: bold;
 }
 a.link:visited {
