@@ -43,7 +43,8 @@ export function handleChangeSelect (e,changeState) {
   }
 
   export function next (state,changeState,dogs) {
-    if (state.currentPage > 21) return
+    if (state.currentPage > 21 && state.alphabetical) return
+    if (state.currentPage > 20 && !state.alphabetical) return
     var index= state.currentPage * 8 - state.numOfDogsCreated;
     if (state.alphabetical && state.descending) {
       if (!state.storage[0]) {
@@ -146,20 +147,40 @@ export function dogCard (d) {
     />
 }
 
-export function filter (state,changeState,dogs) {
+function sortMadeDogs (createdDogs) {
+  return createdDogs.sort(function(a, b) {
+    if(a.name.toLowerCase() < b.name.toLowerCase() ) { return -1; }
+    if( a.name.toLowerCase() >  b.name.toLowerCase()) { return 1; }
+    return 0;
+})
+}
+
+export function filter (state,changeState,dogs,createdDogs) {
     if (state.alphabetical) {
-    if (state.ascending) {
+    if (state.ascending && state.temperaments) {
         changeState((prevState) => {return {...prevState,
             dogsFiltered: selectionTemperament(state,dogs)
           } 
         })
       }
-    if (state.descending) {
+    if (state.descending && state.temperaments) {
         changeState((prevState) => {return {...prevState,
             dogsFiltered: selectionTemperament(state,dogs).reverse()
         } 
       })
     }
+//     if (state.ascending && !state.madeDogs[0]) {
+//       changeState((prevState) => {return {...prevState,
+//           dogsFiltered: sortMadeDogs(createdDogs)
+//       } 
+//     })
+//   }
+//   if (state.descending && !state.madeDogs[0]) {
+//     changeState((prevState) => {return {...prevState,
+//         dogsFiltered: sortMadeDogs(createdDogs).reverse()
+//     } 
+//   })
+// }
 }
     if (state.byWeight) {
         if (state.ascending) {
@@ -178,8 +199,9 @@ export function filter (state,changeState,dogs) {
 }
 
 export function nextFilter (state,changeState) {
-    console.log('1')
+    
     var index = state.currentPage * 8 
+    if (![...state.dogsFiltered]?.splice(index,8)[0]) return 
     if (state.temperaments && state.currentPage === 1) {
         console.log('1.a')
         changeState((prevState) => {return {...prevState,

@@ -1,6 +1,6 @@
 .label {
     display: flex;
-    color: rgb(12, 223, 12);
+    color: rgb(13, 162, 13);
     font-weight: bold;
 }
 
@@ -27,6 +27,7 @@ p {
 span {
     color: red;
     font-weight: bold;
+    margin-left: 5px;
 }
 
 .divsito {
@@ -34,17 +35,51 @@ span {
     position: absolute;
 }
 .form {
-    border: solid 5px red;
-    margin: 100px 500px 0 200px;
-    width: 400px;
+    border: solid 2px red;
+    margin: 100px 0px 0 20px;
+    width: 300px;
     background-color: antiquewhite;
+    border-radius: 5px;
+
 }
 input {
     display:block;
     border-radius: 5px;
+    margin-left: 5px;
+    margin-bottom: 10px;
+    font-size: 25x;
 }
 
 .correct {
-    color: rgb(12, 223, 12);
+    color: rgb(13, 162, 13); 
     font-weight: bold;
+    margin-left: 5px;
+}
+.container {
+    display: flex;
+}
+.showDogInput {
+    margin-top: 100px;
+    margin-left: 20px;
+}
+.select {
+    border-radius: 5px;
+    margin-left: 5px;
+    margin-bottom: 10px;
+    font-size: 25x;
+}
+.end {
+  display: flex;
+}
+
+button {
+    border-radius: 10px;
+    background-color: rgb(4, 4, 4);
+    font-size: 18px;
+    color: rgb(107, 192, 245);
+    border: solid rgb(64, 62, 62) 1px;
+    margin: 0 0 10px 10px;
+    padding-left: 10px;
+    padding-right: 10px;;
+
 }

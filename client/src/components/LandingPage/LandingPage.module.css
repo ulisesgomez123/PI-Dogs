@@ -2,3 +2,15 @@ body {
     background: url('../../dogImg-min.jpg') fixed no-repeat center ;
     background-size: cover;
 }
+
+.p {
+    color: rgb(215, 121, 27);
+    font-size: 40px;
+    padding: 0;
+    margin: 0 0 0 10px;
+}
+h1 {
+    padding: 0;
+    margin: 40px 0 0 10px;
+    font-size: 30px;
+}

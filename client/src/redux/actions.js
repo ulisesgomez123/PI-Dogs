@@ -15,10 +15,9 @@ export function getDogs() {
 
   export function getDogsByQuery(query) {
     return function(dispatch) {
-      return fetch(`http://localhost:3001/dogs?name=${query}`)
-        .then(response => response.json())
+      return axios(`http://localhost:3001/dogs?name=${query}`)
         .then(res => {
-          dispatch({ type: "GET_DOGS_BY_QUERY" ,payload: res });
+          dispatch({ type: "GET_DOGS_BY_QUERY" ,payload: res.data });
         });
     };
   }
@@ -57,10 +56,9 @@ export function getDogs() {
 
   export function getDogByName(name) {
     return function(dispatch) {
-      return fetch(`http://localhost:3001/dogs/search/${name}`)
-        .then(response => response.json())
+      return axios(`http://localhost:3001/dogs/search/${name}`)
         .then(res => {
-          dispatch({ type:"GET_DOG_BY_NAME" ,payload: res });
+          dispatch({ type:"GET_DOG_BY_NAME" ,payload: res.data });
         });
     };
   }

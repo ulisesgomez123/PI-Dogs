@@ -17,19 +17,21 @@ export class Query extends Component {
     render() {
       return (
         <div>
-        estas en query component
-        <div className={style.container}>
-            {this.props.dogList?.map( d => 
-                <DogCard 
-                name={d.name}
-                key={d.id}
-                weightMetric={d.weightMetric}
-                weightImperial={d.weightImperial}
-                img={d.imageUrl}
-                temperament={d.temperament}
-                />
-            )}
-        </div>
+          {typeof this.props.dogList === 'string' ? <h1>{this.props.dogList}</h1> : 
+          <div className={style.container}>
+          {this.props.dogList?.map( d => 
+              <DogCard 
+              name={d.name}
+              key={d.id}
+              weightMetric={d.weightMetric}
+              weightImperial={d.weightImperial}
+              img={d.imageUrl}
+              temperament={d.temperament}
+              />
+          )}
+      </div>
+          }
+        
         </div>
         
       );

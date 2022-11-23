@@ -17,8 +17,7 @@ export default function DogDetails (props) {
 
     return (
         <div>
-        <h1>estas aca</h1>
-
+        <h1 className={style.details}>Details:</h1>
         <div>
         {dog?.map( d => 
         <DogDetailCard

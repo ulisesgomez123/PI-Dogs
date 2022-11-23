@@ -4,11 +4,11 @@ import style from './dogsCard.module.css'
 
 export default function DogCard ({weightImperial,weightMetric, temperament, name, img, id}) {
     return ( 
-      <div className={style.card} >
+      <div className={style.card}>
         <div className={style.cardBody}>
            <div className={style.name}> 
           <NavLink className={style.link} activeClassName={style.active} to={`/dog/${id}`} > 
-           <div>{name}</div>
+           <div className={style.nameDiv}> {name}</div>
            </NavLink>
            </div>
 

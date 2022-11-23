@@ -37,13 +37,14 @@
    export function submitControl (error) {
     if (!error.breedError || !error.heightError || !error.weightError || !error.lifeSpanError) {
      var div = document.createElement("div");
-     div.innerHTML= 'wrong'
+     div.innerHTML= 'wrong, you must fill out the form correctly'
      div.style.position='absolute'
      div.style.fontSize='30px'
      div.style.height='100px'
-     div.style.width='100px'
+     div.style.width='fit-content'
      div.style.color='blue'
-     document.body.appendChild(div)
+     div.style.marginTop='20px'
+     document.querySelector('form').appendChild(div)
      return true
     }
     return false
