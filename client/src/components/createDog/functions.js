@@ -68,7 +68,7 @@
       h1OfCorrect.style.fontSize='30px'
       h1OfCorrect.style.height='100px'
       h1OfCorrect.style.width='fit-content'
-      h1OfCorrect.style.color='blue'
+      h1OfCorrect.style.color='rgb(215, 121, 27)'
       h1OfCorrect.style.marginTop='20px'
       h1OfCorrect.style.fontWeight='bold'
       h1OfCorrect.id= 'h1OfCorrect'

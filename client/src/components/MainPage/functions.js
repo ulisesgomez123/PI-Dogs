@@ -14,7 +14,6 @@ const noFiltered = splited.map(d => {
 return noFiltered.filter(d => !isNaN(d.averageWeight))
 }
 
-
 export function buttonTemperaments (changeState) {
     changeState((prevState) => {return {...prevState,
         temperaments: true,
@@ -23,8 +22,6 @@ export function buttonTemperaments (changeState) {
        } 
      })
 }
-
-
 
  function selectionTemperament (state,dogs) {
     let Dogs = [...dogs].filter(d => d.temperament?.includes(state.temperamentString))
@@ -40,7 +37,6 @@ export function handleChangeSelect (e,changeState) {
        } 
      })
   }
-
 
 function nextControler (state,changeState,dogs,index,Repeat) {
   if (!state.storage[0]) {
@@ -95,11 +91,11 @@ export function dogCard (d) {
 
 function sortMadeDogsByWeight (createdDog) {
   return createdDog.sort(function(a, b) {
-    if(a.weight.split('-')[0] + a.weight.split('-')[1] / 2 < 
-    b.weight.split('-')[0] + b.weight.split('-')[1] / 2) { return -1; }
+    if(parseInt(a.weight.split('-')[0]) + parseInt(a.weight.split('-')[1]) / 2 < 
+    parseInt(b.weight.split('-')[0]) +parseInt(b.weight.split('-')[1])) { return -1; }
 
-    if(a.weight.split('-')[0] + a.weight.split('-')[1] / 2 >
-    b.weight.split('-')[0] + b.weight.split('-')[1] / 2) { return 1; }
+    if(parseInt(a.weight.split('-')[0]) + parseInt(a.weight.split('-')[1]) / 2 >
+    parseInt(b.weight.split('-')[0]) + parseInt(b.weight.split('-')[1]) / 2) { return 1; }
 
     return 0;
 })
@@ -179,6 +175,32 @@ export function nextFilter (state,changeState) {
     }
 }
 
+function orderControler (state,changeState,dogs) {
+  if (!state.beginning) {
+    changeState((prevState) => {return {...prevState,
+    dogsReverse: state.alphabetical && state.ascending ? [...dogs].reverse() : [...dogs].reverse(),
+    orderByWeightDescending: state.byWeight && state.descending ? 
+    [...state.orderByWeightAscending]?.reverse() : null,
+nextDogs: state.alphabetical && state.ascending ? [...dogs].slice(0,8 - state.numOfDogsCreated):
+state.alphabetical && state.descending ? [...dogs].reverse().slice(0,8 - state.numOfDogsCreated):
+state.byWeight && state.ascending ? [...state.orderByWeightAscending].slice(0,8 - state.numOfDogsCreated):
+      state.byWeight && state.descending ? 
+      [...state.orderByWeightAscending].reverse().splice(0,8 - state.numOfDogsCreated) : null,
+      currentPage: 1,
+      storage: [],
+      };})
+  }
+  else {
+    changeState((prevState) => {return {...prevState,
+      storage: state.alphabetical && state.ascending ? [] : [],
+      nextDogs: state.byWeight && state.ascending ? 
+      orderByWeight(dogs).slice(0,8 - state.numOfDogsCreated) : null,
+      beginning: state.byWeight && state.ascending ? false : true,
+      currentPage: state.byWeight && state.ascending ? 1 : 1
+     };})
+  }
+}
+
 export function order (state,changeState,dogs) {
     changeState((prevState) => {return {...prevState,
         orderByWeightAscending: orderByWeight(dogs)
@@ -188,61 +210,12 @@ export function order (state,changeState,dogs) {
         orderByWeightAscending: orderByWeight(dogs)
        };})
     }
-    else if (state.alphabetical) {
-       if (state.ascending) {
-        if (state.beginning) {
-          changeState((prevState) => {return {...prevState,
-            storage: [],
-           };})
-        }
-         else {
-          changeState((prevState) => {return {...prevState,
-            nextDogs: [...dogs].slice(0,8 - state.numOfDogsCreated),
-            currentPage: 1,
-            storage: [],
-           };})
-         } 
-       }
-       if (state.descending) {
-          changeState((prevState) => {return {...prevState,
-            dogsReverse: [...dogs].reverse(),
-            nextDogs: [...dogs].reverse().slice(0,8 - state.numOfDogsCreated),
-            currentPage: 1,
-            storage: [],
-           };})
-        }
-     }
-     else if (state.byWeight) {
-      if (state.ascending) {
-      if (state.beginning) {
-        changeState((prevState) => {return {...prevState,
-          nextDogs: orderByWeight(dogs).slice(0,8 - state.numOfDogsCreated),
-          beginning: false,
-          currentPage: 1,
-         };})
-      }
-       else {
-        changeState((prevState) => {return {...prevState,
-          nextDogs: [...state.orderByWeightAscending].slice(0,8 - state.numOfDogsCreated),
-          currentPage: 1,
-          storage: [],
-         };})
-       } 
-     }
-      if (state.descending) {
-      changeState((prevState) => {return {...prevState,
-        orderByWeightDescending: [...state.orderByWeightAscending]?.reverse(),
-        nextDogs: [...state.orderByWeightAscending].reverse().splice(0,8 - state.numOfDogsCreated),
-        currentPage: 1,
-        storage: [],
-       };})
-    }
-  }
+      orderControler(state,changeState,dogs)
 }
 
 export function previous(state,changeState) {
   if (state.currentPage <= 1) return 
-    let index= state.currentPage * 8 - 8*2
+    let index= state.currentPage * 8 - 8*2 - state.numOfDogsCreated
     if (state.currentPage !== 2) {
           changeState((prevState) => {return {...prevState,
             prevDogs: [...state.storage]?.splice(index, 8),
@@ -253,7 +226,7 @@ export function previous(state,changeState) {
         }
     else{
           changeState((prevState) => {return {...prevState,
-            prevDogs: [...state.storage]?.splice(0,8),
+            prevDogs: [...state.storage]?.splice(0,8 - state.numOfDogsCreated),
             currentPage: state.currentPage - 1,
             prev: true,
            } 

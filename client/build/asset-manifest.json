@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.8dfb40f5.chunk.css",
+    "main.js": "/static/js/main.43e96cb6.chunk.js",
+    "main.js.map": "/static/js/main.43e96cb6.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.09ecb6af.js",
+    "runtime-main.js.map": "/static/js/runtime-main.09ecb6af.js.map",
+    "static/js/2.bfe76986.chunk.js": "/static/js/2.bfe76986.chunk.js",
+    "static/js/2.bfe76986.chunk.js.map": "/static/js/2.bfe76986.chunk.js.map",
+    "static/js/3.742dce5f.chunk.js": "/static/js/3.742dce5f.chunk.js",
+    "static/js/3.742dce5f.chunk.js.map": "/static/js/3.742dce5f.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.8dfb40f5.chunk.css.map": "/static/css/main.8dfb40f5.chunk.css.map",
+    "static/js/2.bfe76986.chunk.js.LICENSE.txt": "/static/js/2.bfe76986.chunk.js.LICENSE.txt",
+    "static/media/LandingPage.module.css": "/static/media/dogImg-min.af39b627.jpg",
+    "static/media/perrito.566261a7.png": "/static/media/perrito.566261a7.png",
+    "static/media/perro.66b36865.png": "/static/media/perro.66b36865.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.09ecb6af.js",
+    "static/js/2.bfe76986.chunk.js",
+    "static/css/main.8dfb40f5.chunk.css",
+    "static/js/main.43e96cb6.chunk.js"
+  ]
+}
