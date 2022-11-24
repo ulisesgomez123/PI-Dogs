@@ -11,7 +11,6 @@ export default function NavBar() {
                     <li >
    <NavLink className={style.link} activeClassName={style.active} to="/main_page">Home</NavLink>
    <NavLink className={style.link} activeClassName={style.active} to='/dogs/creation'>Create Dog</NavLink>
-   <NavLink className={style.link} activeClassName={style.active} to="/about">About</NavLink>
                     </li>
                 </ul>
             </nav>

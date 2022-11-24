@@ -9,7 +9,9 @@ export class LandingPage extends Component {
       return (
 
         <div>
-            <h1>Hello Friend!!!, are you ready for the action?</h1>
+          <h1>  </h1>
+            <p className={style.p}>Hello Friend!!!, are you ready for the action?</p>
+            <h1>  </h1>
             <p className={style.p}>then, go to Home and</p>
             <p className={style.p}>look for your favorite dogs </p>
         </div>

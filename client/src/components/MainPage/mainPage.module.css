@@ -80,6 +80,7 @@
     border-radius: 20px;
     margin-left: 10px;
     margin-right: 10px;
+    font-size: 25px;
 }
 .anotherContainer {
     display: flex;
@@ -93,6 +94,7 @@
     margin: 0;
     padding-left: 10px;
     padding-right: 10px;
+    height: 35px;
 }
 .backButton {
     border-radius: 30px;
@@ -103,4 +105,6 @@
     margin: 0;
     padding-left: 10px;
     padding-right: 10px;
+    height: 35px;
+    margin-left: 5px;
 }

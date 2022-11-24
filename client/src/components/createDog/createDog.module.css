@@ -1,7 +1,8 @@
 .label {
     display: flex;
-    color: rgb(13, 162, 13);
+    color:blue;
     font-weight: bold;
+    font-size: 20px;
 }
 
 .temperament {
@@ -22,6 +23,7 @@ p {
     display: flex;
     color: red;
     font-weight: bold;
+    font-size: 20px;
 }
 
 span {

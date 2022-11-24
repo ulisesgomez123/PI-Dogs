@@ -1,7 +1,7 @@
 import React from 'react';
 import style from '../dogsCard/dogsCard.module.css'
 
-export default function DogDetailCard ({weightImperial,weightMetric,temperament,name,img,heightMetric,heightImperial,lifeSpan}) {
+export default function CreateDog ({weight,temperament,name,img,height,lifeSpan}) {
     return ( 
       <div className={style.align}>
       <div className={style.card} >
@@ -20,14 +20,12 @@ export default function DogDetailCard ({weightImperial,weightMetric,temperament,
 
             <div>
             <div className={style.atributes}>Weight: </div>
-  <label className={style.atributes}>kilograms: </label> <div className={style.content}>{weightMetric}</div>
-  <label className={style.atributes}> pounds: </label><div className={style.content}>{weightImperial}</div>
+  <label className={style.atributes}>kilograms: </label> <div className={style.content}>{weight}</div>
             </div>
 
             <div>
             <div className={style.atributes}>Height: </div>
-            <label className={style.atributes}>Centimeters: </label> <div className={style.content}>{heightMetric}</div>
-            <label className={style.atributes}>Inches: </label> <div className={style.content}>{heightImperial}</div>
+            <label className={style.atributes}>Centimeters: </label> <div className={style.content}>{height}</div>
             </div>
 
             <div className={style.space}>

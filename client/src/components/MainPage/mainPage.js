@@ -2,12 +2,12 @@ import React from "react";
 import img from '../../perrito.png';
 import {getDogs,getTemperaments} from '../../redux/actions';
 import { getDogByName } from "../../redux/actions";
-import DogCard from "../dogsCard/dogcard";
 import style from './mainPage.module.css'
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux"; 
 import {buttonTemperaments,handleChangeSelect,next,dogCard,filter
        ,nextFilter,order,previous} from './functions';
+import CreateDog from "../createdDog/createdDogCard";
 
 function MainPage () {
   let dispatch= useDispatch();
@@ -20,7 +20,7 @@ function MainPage () {
     beginning: true,
     value: '',
     currentPage: 1,
-    dogs:[],
+    dogsReverse:[],
     numOfDogsCreated: createdDogs.length,
     prev: false,
     alphabetical: true,
@@ -30,7 +30,6 @@ function MainPage () {
     orderByWeightAscending: false,
     orderByWeightDescending: false,
     temperaments: false,
-    switch: [false,false],
     madeDogs: [false,true,true]
   })
   
@@ -54,7 +53,7 @@ function MainPage () {
    })
   }
     
-  function  searchFunction () {
+  function searchFunction () {
       dispatch(getDogByName(mainPage.value))
       setMainPage((prevState) => {return {...prevState,
         value: '',
@@ -104,7 +103,8 @@ function MainPage () {
         numOfDogsCreated: 0,
         dogsFiltered: false,
         temperaments: false,
-        currentPage: mainPage.storage[0] ? isNaN(mainPage.storage[mainPage.storage.length-1]) ? 1 : mainPage.storage[mainPage.storage.length-1] : 1
+        currentPage: mainPage.storage[0] ? isNaN(mainPage.storage[mainPage.storage.length-1]) ? 1 
+        : mainPage.storage[mainPage.storage.length-1] : 1
        } 
      })
     }
@@ -121,7 +121,7 @@ function MainPage () {
     }
       return ( 
         <div>
-          <h1>Pagina: {mainPage.currentPage}</h1>
+          <h1>Page: {mainPage.currentPage}</h1>
 
     {mainPage.temperaments ? <select onChange={(e)=>handleChangeSelect(e,setMainPage,mainPage)}
     className={style.select1}><option key='0'>Temperaments </option> {temperaments?.map(t =>
@@ -131,7 +131,8 @@ function MainPage () {
  <div className={style.containerOfBtns}>
     <button onClick={notMadeDogs} className={style.btnFilter}>Not made dogs</button>
     <button onClick={madeDogs} className={style.btnFilter}>Made dogs</button>
-    <button onClick={() =>buttonTemperaments(setMainPage)} className={style.btnFilter}> Dog temperaments</button>
+    <button onClick={() =>buttonTemperaments(setMainPage)}
+     className={style.btnFilter}> Dog temperaments</button>
 </div>
 <div className={style.selectContainer}>
           <select onChange={(e) => onChange(e)} className={style.select}>
@@ -146,15 +147,21 @@ function MainPage () {
 </div>
 </div>  
 <div className={style.buttonOfNyP}>
-          {mainPage.dogsFiltered ? mainPage.dogsFiltered[0] ? mainPage.dogsFiltered.length > 8 ? 
-<button className={style.buttonOfPrevious} onClick={()=>previous(mainPage,setMainPage)}> previous</button > : null : 
-<button className={style.buttonOfPrevious} onClick={()=>previous(mainPage,setMainPage)}>previous</button> : 
-<button className={style.buttonOfPrevious} onClick={()=>previous(mainPage,setMainPage)}>previous</button>}
+      {mainPage.dogsFiltered ? mainPage.dogsFiltered[0] ? mainPage.dogsFiltered.length > 8 ? 
+<button className={style.buttonOfPrevious} onClick={()=>previous(mainPage,setMainPage)}> 
+previous</button > : null : mainPage.madeDogs.length === 3 || mainPage.madeDogs[0] ? 
+<button className={style.buttonOfPrevious} onClick={()=>previous(mainPage,setMainPage)}>
+previous</button> : null : mainPage.madeDogs.length === 3 || mainPage.madeDogs[0] ? 
+<button className={style.buttonOfPrevious} onClick={()=>previous(mainPage,setMainPage)}>
+previous</button> : null }
 
           {mainPage.dogsFiltered ? mainPage.dogsFiltered[0] ? mainPage.dogsFiltered.length > 8 ? 
-<button className={style.buttonOfNext} onClick={()=>nextFilter(mainPage,setMainPage)}>next</button> : null : 
-<button className={style.buttonOfNext} onClick={()=>next(mainPage,setMainPage,dogsloaded)}>next</button> : 
-<button className={style.buttonOfNext} onClick={()=>next(mainPage,setMainPage,dogsloaded)}>next</button>}
+<button className={style.buttonOfNext} onClick={()=>nextFilter(mainPage,setMainPage)}>
+next</button> : null : mainPage.madeDogs.length === 3 || mainPage.madeDogs[0] ? 
+<button className={style.buttonOfNext} onClick={()=>next(mainPage,setMainPage,dogsloaded)}>
+next</button> : null :  mainPage.madeDogs.length === 3 || mainPage.madeDogs[0] ?
+<button className={style.buttonOfNext} onClick={()=>next(mainPage,setMainPage,dogsloaded)}>
+next</button> : null }
 </div>
           {mainPage.dogsFiltered && mainPage.temperaments ? 
           <h2> Found dogs: {mainPage.dogsFiltered.length} </h2> : null }
@@ -168,11 +175,13 @@ function MainPage () {
         <div className={style.container}>
         {dogsloadedBySearch[0] ? null : mainPage.currentPage === 1 && mainPage.madeDogs[1]
          && !mainPage.madeDogs[0] ? createdDogs?.map( d => 
-                <DogCard 
+                <CreateDog
                 name={d.name}
                 key={d.id}
-                weightMetric={d.weight}
+                weight={d.weight}
+                height= {d.height}
                 temperament={d.temperament}
+                lifeSpan= {d.life_Span}
                 img={img}
                 id={d.id}
                 />
@@ -188,7 +197,7 @@ function MainPage () {
              : mainPage.prev ? mainPage.prevDogs?.map( d => dogCard(d))
              : mainPage.nextDogs ? mainPage.nextDogs?.map( d => dogCard(d)) 
              : mainPage.alphabetical && mainPage.descending ?
-             [...mainPage.dogs]?.slice(0,8 -mainPage.numOfDogsCreated).map( d => dogCard(d)) : 
+             [...mainPage.dogsReverse]?.slice(0,8 -mainPage.numOfDogsCreated).map( d => dogCard(d)) : 
              !mainPage.madeDogs[0]  && mainPage.madeDogs[1] && mainPage.madeDogs[2] ?  
              [...dogsloaded]?.slice(0,8-mainPage.numOfDogsCreated).map( d => dogCard(d)) :
               mainPage.madeDogs[0]  && mainPage.madeDogs[1] ?  

@@ -19,14 +19,14 @@ export function buttonTemperaments (changeState) {
     changeState((prevState) => {return {...prevState,
         temperaments: true,
         beginning: false,
-        switch: [true],
         madeDogs: [true,true]
        } 
      })
 }
 
+
+
  function selectionTemperament (state,dogs) {
-    if (state.beginning) return
     let Dogs = [...dogs].filter(d => d.temperament?.includes(state.temperamentString))
     return Dogs
     }
@@ -36,103 +36,49 @@ export function handleChangeSelect (e,changeState) {
         temperamentString: e.target.value,
         currentPage: 1,
         nextDogs:'',
-        switch: [true,true],
         madeDogs: [true,true]
        } 
      })
   }
 
+
+function nextControler (state,changeState,dogs,index,Repeat) {
+  if (!state.storage[0]) {
+    changeState((prevState) => {return {...prevState,
+      nextDogs: state.descending && state.alphabetical ? [...state.dogsReverse]?.splice(index,8) :
+               state.ascending && state.alphabetical ? [...dogs]?.splice(index, 8) : 
+               state.ascending && state.byWeight ? [...state.orderByWeightAscending].splice(index,8) :
+               state.descending && state.byWeight ? [...state.orderByWeightDescending].splice(index,8) : null,
+      currentPage: state.currentPage + 1,
+      storage: state.descending && state.alphabetical ? [...state.dogsReverse]?.splice(0,8 - state.numOfDogsCreated):
+               state.ascending && state.alphabetical ? [...dogs]?.splice(0, 8 -  state.numOfDogsCreated) :
+               state.ascending && state.byWeight ? [...state.nextDogs] :
+               state.descending && state.byWeight ? [...state.nextDogs] : null,
+      prev: false,
+           } 
+        })
+  }
+  else {
+    changeState((prevState) => {return {...prevState,
+nextDogs: state.ascending && state.alphabetical ? [...dogs]?.splice(index, 8):
+          state.descending && state.alphabetical ? [...state.dogsReverse]?.splice(index,8) :
+          state.ascending && state.byWeight ? [...state.orderByWeightAscending].splice(index, 8) :
+          state.descending && state.byWeight ? [...state.orderByWeightDescending].splice(index, 8) :null,
+storage: !Repeat ? [...state.storage,...state.nextDogs] : [...state.storage],
+currentPage: state.currentPage + 1,
+prev: false,
+     } 
+   })
+  }
+;
+}
+
   export function next (state,changeState,dogs) {
     if (state.currentPage > 21 && state.alphabetical) return
     if (state.currentPage > 20 && !state.alphabetical) return
     var index= state.currentPage * 8 - state.numOfDogsCreated;
-    if (state.alphabetical && state.descending) {
-      if (!state.storage[0]) {
-        console.log('aaaaa')
-       changeState((prevState) => {return {...prevState,
-        nextDogs: [...state.dogs]?.splice(index,8),
-        currentPage: state.currentPage + 1,
-        storage: [...state.dogs]?.splice(0,8 - state.numOfDogsCreated),
-        prev: false,} 
-    });
-  }
-  else {
-    console.log('bbbbb')
-    changeState((prevState) => {return {...prevState,
-     nextDogs: [...state.dogs]?.splice(index,8),
-     currentPage: state.currentPage + 1,
-     storage: [...state.storage,...state.nextDogs],
-     prev: false,} 
- });
-}
-}
-    if (state.alphabetical && state.ascending) {
-      if (!state.storage[0]) {
-        console.log('kkkkk')
-        changeState((prevState) => {return {...prevState,
-          nextDogs: [...dogs]?.splice(index, 8),
-          currentPage: state.currentPage + 1,
-          storage: [...dogs]?.splice(0, 8 -  state.numOfDogsCreated),
-          prev: false,
-         } 
-       })
-      }
-   else {
-    console.log('jjjjj')
-    changeState((prevState) => {return {...prevState,
-      nextDogs: [...dogs]?.splice(index, 8),
-      storage: [...state.storage,...state.nextDogs],
-      currentPage: state.currentPage + 1,
-      prev: false,
-     } 
-   })
-  }
-  }
-
-  if (state.byWeight && state.ascending) {
-    if (!state.storage[0]) {
-      console.log('ooooooooo')
-      changeState((prevState) => {return {...prevState,
-        nextDogs: [...state.orderByWeightAscending].splice(index,8),
-        currentPage: state.currentPage + 1,
-        storage: [...state.nextDogs],
-        prev: false,
-       } 
-     })
-    }
- else {
-  console.log('uuuuuuuuu')
-  changeState((prevState) => {return {...prevState,
-    nextDogs:[...state.orderByWeightAscending].splice(index, 8),
-    storage: [...state.storage,...state.nextDogs],
-    currentPage: state.currentPage + 1,
-    prev: false,
-   } 
- })
-}
-}
-if (state.byWeight && state.descending) {
-  if (!state.storage[0]) {
-    console.log('ooooooooo')
-    changeState((prevState) => {return {...prevState,
-      nextDogs: [...state.orderByWeightDescending].splice(index,8),
-      currentPage: state.currentPage + 1,
-      storage: [...state.nextDogs],
-      prev: false,
-     } 
-   })
-  }
-else {
-console.log('uuuuuuuuu')
-changeState((prevState) => {return {...prevState,
-  nextDogs:[...state.orderByWeightDescending].splice(index, 8),
-  storage: [...state.storage,...state.nextDogs],
-  currentPage: state.currentPage + 1,
-  prev: false,
-       } 
-    })
-   }
-  }
+    var Repeat= state.storage.find(d =>  d.id === state.nextDogs[0].id)
+    nextControler(state,changeState,dogs,index,Repeat)
 }
 
 export function dogCard (d) {
@@ -147,10 +93,22 @@ export function dogCard (d) {
     />
 }
 
+function sortMadeDogsByWeight (createdDog) {
+  return createdDog.sort(function(a, b) {
+    if(a.weight.split('-')[0] + a.weight.split('-')[1] / 2 < 
+    b.weight.split('-')[0] + b.weight.split('-')[1] / 2) { return -1; }
+
+    if(a.weight.split('-')[0] + a.weight.split('-')[1] / 2 >
+    b.weight.split('-')[0] + b.weight.split('-')[1] / 2) { return 1; }
+
+    return 0;
+})
+}
+
 function sortMadeDogs (createdDogs) {
   return createdDogs.sort(function(a, b) {
-    if(a.name.toLowerCase() < b.name.toLowerCase() ) { return -1; }
-    if( a.name.toLowerCase() >  b.name.toLowerCase()) { return 1; }
+    if(a.name[0].toLowerCase() < b.name[0].toLowerCase() ) { return -1; }
+    if( a.name[0].toLowerCase() >  b.name[0].toLowerCase()) { return 1; }
     return 0;
 })
 }
@@ -169,18 +127,12 @@ export function filter (state,changeState,dogs,createdDogs) {
         } 
       })
     }
-//     if (state.ascending && !state.madeDogs[0]) {
-//       changeState((prevState) => {return {...prevState,
-//           dogsFiltered: sortMadeDogs(createdDogs)
-//       } 
-//     })
-//   }
-//   if (state.descending && !state.madeDogs[0]) {
-//     changeState((prevState) => {return {...prevState,
-//         dogsFiltered: sortMadeDogs(createdDogs).reverse()
-//     } 
-//   })
-// }
+    if (state.ascending && !state.madeDogs[0] && state.madeDogs.length === 2) {
+           sortMadeDogs(createdDogs)
+    }
+  if (state.descending && !state.madeDogs[0] && state.madeDogs.length === 2) {
+    sortMadeDogs(createdDogs).reverse()
+ }
 }
     if (state.byWeight) {
         if (state.ascending) {
@@ -195,15 +147,19 @@ export function filter (state,changeState,dogs,createdDogs) {
               } 
             })
         }
+        if (state.ascending && !state.madeDogs[0] && state.madeDogs.length === 2) {
+          sortMadeDogsByWeight(createdDogs)
+   }
+ if (state.descending && !state.madeDogs[0] && state.madeDogs.length === 2) {
+   sortMadeDogsByWeight(createdDogs).reverse()
     }
+  }
 }
 
 export function nextFilter (state,changeState) {
-    
     var index = state.currentPage * 8 
     if (![...state.dogsFiltered]?.splice(index,8)[0]) return 
     if (state.temperaments && state.currentPage === 1) {
-        console.log('1.a')
         changeState((prevState) => {return {...prevState,
             nextDogs: [...state.dogsFiltered]?.splice(index,8),
             storage: [...state.dogsFiltered]?.splice(0,8),
@@ -213,7 +169,6 @@ export function nextFilter (state,changeState) {
         })
     }
     else {
-        console.log('2.a')
         changeState((prevState) => {return {...prevState,
             nextDogs: [...state.dogsFiltered]?.splice(index,8),
             storage: [...state.storage,...state.nextDogs],
@@ -228,7 +183,7 @@ export function order (state,changeState,dogs) {
     changeState((prevState) => {return {...prevState,
         orderByWeightAscending: orderByWeight(dogs)
        };})
-     if (state.temperaments && state.switch[0]) {
+     if (state.temperaments) {
       changeState((prevState) => {return {...prevState,
         orderByWeightAscending: orderByWeight(dogs)
        };})
@@ -250,7 +205,7 @@ export function order (state,changeState,dogs) {
        }
        if (state.descending) {
           changeState((prevState) => {return {...prevState,
-            dogs: [...dogs].reverse(),
+            dogsReverse: [...dogs].reverse(),
             nextDogs: [...dogs].reverse().slice(0,8 - state.numOfDogsCreated),
             currentPage: 1,
             storage: [],
@@ -260,7 +215,6 @@ export function order (state,changeState,dogs) {
      else if (state.byWeight) {
       if (state.ascending) {
       if (state.beginning) {
-        console.log('estas en beginning')
         changeState((prevState) => {return {...prevState,
           nextDogs: orderByWeight(dogs).slice(0,8 - state.numOfDogsCreated),
           beginning: false,
@@ -268,7 +222,6 @@ export function order (state,changeState,dogs) {
          };})
       }
        else {
-        console.log('estas en started')
         changeState((prevState) => {return {...prevState,
           nextDogs: [...state.orderByWeightAscending].slice(0,8 - state.numOfDogsCreated),
           currentPage: 1,
@@ -289,7 +242,7 @@ export function order (state,changeState,dogs) {
 
 export function previous(state,changeState) {
   if (state.currentPage <= 1) return 
-    var index= state.currentPage * 8 - 8*2
+    let index= state.currentPage * 8 - 8*2
     if (state.currentPage !== 2) {
           changeState((prevState) => {return {...prevState,
             prevDogs: [...state.storage]?.splice(index, 8),
